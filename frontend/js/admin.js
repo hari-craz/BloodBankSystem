@@ -55,6 +55,69 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // Wire once: stock row actions (previously bound on every reload)
+  const stockTableBody = document.getElementById("stockTableBody");
+  if (stockTableBody) {
+    stockTableBody.addEventListener("click", async (e) => {
+      const btn = e.target.closest("button[data-action]");
+      if (!btn) return;
+      const id = btn.dataset.id;
+      const action = btn.dataset.action;
+
+      try {
+        let url;
+        let method = "POST";
+        if (action === "used") url = `${API_BASE}/admin/stock/${id}/mark-used`;
+        else if (action === "expired")
+          url = `${API_BASE}/admin/stock/${id}/mark-expired`;
+        else if (action === "delete") {
+          url = `${API_BASE}/admin/stock/${id}`;
+          method = "DELETE";
+        }
+
+        if (!url) return;
+
+        const res = await fetch(url, {
+          method,
+          headers: getAuthHeaders(),
+        });
+        if (res.ok) {
+          loadOverview();
+          loadStock();
+        }
+      } catch (err) {
+        console.error("Stock action failed:", err);
+      }
+    });
+  }
+
+  // Wire once: request action buttons
+  const requestsTableBody = document.getElementById("requestsTableBody");
+  if (requestsTableBody) {
+    requestsTableBody.addEventListener("click", async (e) => {
+      const btn = e.target.closest("button[data-action]");
+      if (!btn) return;
+
+      const id = btn.dataset.id;
+      const action = btn.dataset.action;
+
+      try {
+        const res = await fetch(`${API_BASE}/admin/requests/${id}/${action}` ,{
+            method: "POST",
+            headers: getAuthHeaders(),
+          }
+        );
+        if (res.ok) {
+          loadOverview();
+          loadRequests();
+          loadStock();
+        }
+      } catch (err) {
+        console.error("Update request failed:", err);
+      }
+    });
+  }
+
   // Load data
   loadOverview();
   loadStock();

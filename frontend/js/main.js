@@ -14,15 +14,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // Example: load homepage stats if present
   const donorsEl = document.getElementById("totalDonors");
   const unitsEl = document.getElementById("totalUnits");
+  const pendingEl = document.getElementById("pendingRequests");
 
-  if (donorsEl && unitsEl) {
-    // Skeleton: integrate with backend later
+  if (donorsEl && unitsEl && pendingEl) {
     fetch("http://localhost:3000/api/stats")
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (!data) return;
         donorsEl.textContent = data.totalDonors ?? "0";
         unitsEl.textContent = data.totalUnits ?? "0";
+        pendingEl.textContent = data.pendingRequests ?? "0";
       })
       .catch((err) => console.error(err));
   }
