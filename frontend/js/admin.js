@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:3000/api";
+const API_BASE = window.location.origin.replace(':8080', ':3000') + "/api";
 
 function getAuthHeaders() {
   const token = localStorage.getItem("bb_token");
@@ -210,35 +210,6 @@ async function loadStock() {
       tbody.appendChild(tr);
     });
 
-    tbody.addEventListener("click", async (e) => {
-      const btn = e.target.closest("button[data-action]");
-      if (!btn) return;
-      const id = btn.dataset.id;
-      const action = btn.dataset.action;
-
-      try {
-        let url;
-        let method = "POST";
-        if (action === "used") url = `${API_BASE}/admin/stock/${id}/mark-used`;
-        else if (action === "expired")
-          url = `${API_BASE}/admin/stock/${id}/mark-expired`;
-        else if (action === "delete") {
-          url = `${API_BASE}/admin/stock/${id}`;
-          method = "DELETE";
-        }
-
-        const res = await fetch(url, {
-          method,
-          headers: getAuthHeaders(),
-        });
-        if (res.ok) {
-          loadOverview();
-          loadStock();
-        }
-      } catch (err) {
-        console.error("Stock action failed:", err);
-      }
-    });
   } catch (err) {
     console.error("Stock load failed:", err);
   }
@@ -272,30 +243,6 @@ async function loadRequests() {
       tbody.appendChild(tr);
     });
 
-    tbody.addEventListener("click", async (e) => {
-      const btn = e.target.closest("button[data-action]");
-      if (!btn) return;
-
-      const id = btn.dataset.id;
-      const action = btn.dataset.action;
-
-      try {
-        const res = await fetch(
-          `${API_BASE}/admin/requests/${id}/${action}`,
-          {
-            method: "POST",
-            headers: getAuthHeaders(),
-          }
-        );
-        if (res.ok) {
-          loadOverview();
-          loadRequests();
-          loadStock();
-        }
-      } catch (err) {
-        console.error("Update request failed:", err);
-      }
-    });
   } catch (err) {
     console.error("Requests load failed:", err);
   }

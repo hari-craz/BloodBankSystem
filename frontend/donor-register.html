@@ -111,6 +111,7 @@
   </main>
 
   <script>
+    const API_URL = window.location.origin.replace(':8080', ':3000');
     const donorForm = document.getElementById("donorForm");
     const donorMessage = document.getElementById("donorMessage");
 
@@ -123,7 +124,7 @@
       const payload = Object.fromEntries(formData.entries());
 
       try {
-        const res = await fetch("http://localhost:3000/api/donors", {
+        const res = await fetch(API_URL + "/api/donors", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),

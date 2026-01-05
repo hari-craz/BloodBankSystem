@@ -11,18 +11,24 @@ services:
       MYSQL_PASSWORD: change_me
     volumes:
       - db_data:/var/lib/mysql
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
     # Uncomment to expose MySQL to host (not recommended for production)
     # ports:
     #   - "3306:3306"
 
   backend:
     build:
-      context: .
-      dockerfile: backend/Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     env_file:
       - ./backend/.env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "3000:3000"
     restart: unless-stopped

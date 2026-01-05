@@ -71,9 +71,10 @@
 
   <script>
     // Fetch live stats from backend
+    const API_URL = window.location.origin.replace(':8080', ':3000');
     async function loadStats() {
       try {
-        const res = await fetch("http://localhost:3000/api/stats");
+        const res = await fetch(API_URL + "/api/stats");
         if (!res.ok) return;
         const data = await res.json();
 
