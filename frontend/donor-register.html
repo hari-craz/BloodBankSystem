@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Become a Donor | Blood Bank+</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img src="img/logo.png" alt="Blood Bank Logo"
+           style="height:40px;width:auto;border-radius:8px;" />
+      <span style="font-weight:700;font-size:20px;">Blood Bank+</span>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="donor-register.html">Become a Donor</a>
+      <a href="request-blood.html">Request Blood</a>
+      <a href="login.html">Admin Login</a>
+    </nav>
+  </header>
+
+  <main style="margin-top:110px;display:flex;justify-content:center;padding:20px;">
+    <div style="max-width:900px;width:100%;display:flex;gap:30px;flex-wrap:wrap;align-items:flex-start;">
+      
+      <!-- Left side info -->
+      <div style="flex:1;min-width:260px;">
+        <h1 style="font-size:32px;margin-bottom:10px;">Become a Donor</h1>
+        <p style="opacity:0.8;margin-bottom:18px;">
+          A single donation can save up to three lives. Register as a donor and
+          we will contact you only when there is a verified, matching requirement.
+        </p>
+        <div class="glass-card">
+          <h3 style="margin-bottom:8px;">Who can donate?</h3>
+          <ul style="opacity:0.8;font-size:14px;line-height:1.6;">
+            <li>Age between 18 and 65 years</li>
+            <li>Minimum weight 50 kg</li>
+            <li>No major illness in the last 6 months</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right side form -->
+      <div style="flex:1.1;min-width:260px;">
+        <div class="glass-card">
+          <h2 style="margin-bottom:18px;">Donor Registration Form</h2>
+          <form id="donorForm">
+            <div class="form-group">
+              <input class="form-input" type="text" id="name" name="name"
+                     placeholder=" " required />
+              <label class="form-label" for="name">Full Name</label>
+            </div>
+
+            <div class="form-group">
+              <input class="form-input" type="number" id="age" name="age"
+                     placeholder=" " min="18" max="65" required />
+              <label class="form-label" for="age">Age (18–65)</label>
+            </div>
+
+            <div class="form-group">
+              <select class="form-input" id="gender" name="gender" required>
+                <option value="" disabled selected hidden></option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              <label class="form-label" for="gender">Gender</label>
+            </div>
+
+            <div class="form-group">
+              <select class="form-input" id="blood_group" name="blood_group" required>
+                <option value="" disabled selected hidden></option>
+                <option>A+</option><option>A-</option>
+                <option>B+</option><option>B-</option>
+                <option>O+</option><option>O-</option>
+                <option>AB+</option><option>AB-</option>
+              </select>
+              <label class="form-label" for="blood_group">Blood Group</label>
+            </div>
+
+            <div class="form-group">
+              <input class="form-input" type="tel" id="phone" name="phone"
+                     placeholder=" " required />
+              <label class="form-label" for="phone">Phone Number</label>
+            </div>
+
+            <div class="form-group">
+              <input class="form-input" type="email" id="email" name="email"
+                     placeholder=" " />
+              <label class="form-label" for="email">Email (optional)</label>
+            </div>
+
+            <div class="form-group">
+              <textarea class="form-input" id="address" name="address"
+                        rows="3" placeholder=" "></textarea>
+              <label class="form-label" for="address">Address / Area</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px;">
+              Register as Donor
+            </button>
+
+            <p id="donorMessage" style="margin-top:10px;font-size:14px;"></p>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const donorForm = document.getElementById("donorForm");
+    const donorMessage = document.getElementById("donorMessage");
+
+    donorForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      donorMessage.textContent = "Submitting...";
+      donorMessage.style.color = "#cccccc";
+
+      const formData = new FormData(donorForm);
+      const payload = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch("http://localhost:3000/api/donors", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (res.ok) {
+          donorMessage.textContent = "Thank you! You have been registered as a donor.";
+          donorMessage.style.color = "#4eff7b";
+          donorForm.reset();
+        } else {
+          donorMessage.textContent = "Error registering donor. Please try again.";
+          donorMessage.style.color = "#ff5f77";
+        }
+      } catch (err) {
+        console.error(err);
+        donorMessage.textContent = "Server error. Please try again later.";
+        donorMessage.style.color = "#ff5f77";
+      }
+    });
+  </script>
+</body>
+</html>

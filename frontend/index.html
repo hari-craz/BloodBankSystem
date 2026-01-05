@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blood Bank Management System</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img src="img/logo.png" alt="Blood Bank Logo" style="height:40px;width:auto;border-radius:8px;" />
+      <span style="font-weight:700;font-size:20px;">Blood Bank+</span>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="donor-register.html">Become a Donor</a>
+      <a href="request-blood.html">Request Blood</a>
+      <a href="login.html">Admin Login</a>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <main>
+    <section class="hero">
+      <h1>Modern Blood Bank Management</h1>
+      <p>
+        Register donors, track every unit of blood, and respond quickly to
+        emergency requests with a secure, centralized system.
+      </p>
+      <div style="display:flex;justify-content:center;gap:16px;">
+        <a href="donor-register.html" class="btn btn-primary">Become a Donor</a>
+        <a href="request-blood.html" class="btn btn-outline">Request Blood</a>
+      </div>
+    </section>
+
+    <!-- STATS CARDS (LIVE FROM BACKEND) -->
+    <section class="stats-container">
+      <div class="stat-card">
+        <h2 id="totalDonors">0</h2>
+        <p>Total Registered Donors</p>
+      </div>
+      <div class="stat-card">
+        <h2 id="totalUnits">0</h2>
+        <p>Units Available</p>
+      </div>
+      <div class="stat-card">
+        <h2 id="pendingRequests">0</h2>
+        <p>Pending Requests</p>
+      </div>
+    </section>
+
+    <!-- INFO SECTION -->
+    <section style="max-width:800px;margin:60px auto 0;text-align:center;">
+      <div class="glass-card">
+        <h2 style="margin-bottom:10px;">Why this System?</h2>
+        <p style="opacity:0.8;margin-bottom:14px;">
+          Traditional paper registers and spreadsheets make it hard to know which
+          blood groups are truly available. Our Blood Bank Management System keeps
+          real-time records of donors, stock units, and patient requests.
+        </p>
+        <p style="opacity:0.8;">
+          Each blood bag is tracked individually with collection and expiry dates,
+          helping staff make safe and fast decisions—especially during emergencies.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Fetch live stats from backend
+    async function loadStats() {
+      try {
+        const res = await fetch("http://localhost:3000/api/stats");
+        if (!res.ok) return;
+        const data = await res.json();
+
+        document.getElementById("totalDonors").textContent =
+          data.totalDonors ?? 0;
+        document.getElementById("totalUnits").textContent =
+          data.totalUnits ?? 0;
+        document.getElementById("pendingRequests").textContent =
+          data.pendingRequests ?? 0;
+      } catch (e) {
+        console.error("Failed to load stats", e);
+      }
+    }
+
+    loadStats();
+  </script>
+</body>
+</html>

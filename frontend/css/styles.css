@@ -1,0 +1,248 @@
+/* ================================
+   GLOBAL RESET + THEME
+================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #101010, #1b1b1b);
+  color: #fff;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ================================
+   GLASS UI COMPONENT
+================================ */
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  border-radius: 16px;
+  padding: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.29);
+  transition: 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+}
+
+/* ================================
+   BUTTONS
+================================ */
+.btn {
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+  border: none;
+}
+
+.btn-primary {
+  background: #ff3b5c;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #ff5f77;
+}
+
+.btn-outline {
+  border: 1px solid #ff3b5c;
+  color: #ff3b5c;
+  background: transparent;
+}
+
+.btn-outline:hover {
+  background: #ff3b5c;
+  color: white;
+}
+
+/* ================================
+   FORMS (FLOATING LABEL)
+================================ */
+.form-group {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: white;
+}
+
+.form-label {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  transition: 0.25s ease;
+  opacity: 0.7;
+}
+
+.form-input:focus + .form-label,
+.form-input:not(:placeholder-shown) + .form-label {
+  top: -12px;
+  font-size: 12px;
+  opacity: 1;
+  color: #ff3b5c;
+}
+
+/* ================================
+   NAVBAR (PUBLIC PAGES)
+================================ */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 40px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+}
+
+.navbar a {
+  font-weight: 600;
+  margin-left: 22px;
+}
+
+/* ================================
+   HERO SECTION
+================================ */
+.hero {
+  margin-top: 120px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 52px;
+  margin-bottom: 18px;
+}
+
+.hero p {
+  opacity: 0.7;
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+/* ================================
+   STATS CARDS
+================================ */
+.stats-container {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 40px;
+}
+
+.stat-card {
+  width: 250px;
+  padding: 30px;
+  text-align: center;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.09);
+  backdrop-filter: blur(15px);
+}
+
+.stat-card h2 {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+/* ================================
+   ADMIN SIDEBAR (Minimal)
+================================ */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 220px;
+  height: 100%;
+  background: #111;
+  padding: 30px 20px;
+  border-right: 1px solid #222;
+}
+
+.sidebar h2 {
+  margin-bottom: 40px;
+  font-size: 22px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 14px;
+  color: #bbb;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.sidebar a:hover,
+.sidebar .active {
+  background: #ff3b5c;
+  color: white;
+}
+
+/* ================================
+   DASHBOARD MAIN AREA
+================================ */
+.main-content {
+  margin-left: 240px;
+  padding: 40px;
+}
+
+.dashboard-cards {
+  display: flex;
+  gap: 20px;
+}
+
+.dashboard-card {
+  width: 250px;
+  padding: 28px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.07);
+  text-align: center;
+}
+
+/* ================================
+   TABLES (Blood Stock / Requests)
+================================ */
+.table-container {
+  margin-top: 40px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255,255,255,0.07);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+table th, table td {
+  padding: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+table th {
+  background: rgba(0,0,0,0.3);
+}
+
+.status-available { color: #4eff7b; }
+.status-used { color: #ffaa2b; }
+.status-expired { color: #ff4141; }

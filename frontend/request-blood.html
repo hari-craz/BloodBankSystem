@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Request Blood | Blood Bank+</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img src="img/logo.png" alt="Blood Bank Logo"
+           style="height:40px;width:auto;border-radius:8px;" />
+      <span style="font-weight:700;font-size:20px;">Blood Bank+</span>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="donor-register.html">Become a Donor</a>
+      <a href="request-blood.html">Request Blood</a>
+      <a href="login.html">Admin Login</a>
+    </nav>
+  </header>
+
+  <main style="margin-top:110px;display:flex;justify-content:center;padding:20px;">
+    <div style="max-width:950px;width:100%;display:flex;gap:30px;flex-wrap:wrap;align-items:flex-start;">
+      
+      <!-- Left side info -->
+      <div style="flex:1;min-width:260px;">
+        <h1 style="font-size:32px;margin-bottom:10px;">Request for Blood</h1>
+        <p style="opacity:0.8;margin-bottom:18px;">
+          Submit your requirement. Our team will verify and confirm availability
+          before dispatching any blood units to the hospital or patient.
+        </p>
+
+        <div class="glass-card">
+          <h3 style="margin-bottom:8px;">Important Notes</h3>
+          <ul style="opacity:0.8;font-size:14px;line-height:1.6;">
+            <li>Provide a reachable phone number for quick confirmation.</li>
+            <li>If you are from a hospital, mention the hospital name.</li>
+            <li>For emergency cases, call the blood bank directly.</li>
+          </ul>
+        </div>
+
+        <div class="glass-card" style="margin-top:18px;">
+          <h3 style="margin-bottom:10px;">Availability</h3>
+          <p id="availabilityText" style="opacity:0.9;">
+            Select a blood group to check current availability.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right side form -->
+      <div style="flex:1.1;min-width:260px;">
+        <div class="glass-card">
+          <h2 style="margin-bottom:18px;">Blood Request Form</h2>
+          <form id="requestForm">
+            <div class="form-group">
+              <input class="form-input" type="text" id="requester_name"
+                     name="requester_name" placeholder=" " required />
+              <label class="form-label" for="requester_name">Requester Name</label>
+            </div>
+
+            <div class="form-group">
+              <select class="form-input" id="requester_type" name="requester_type" required>
+                <option value="" disabled selected hidden></option>
+                <option value="patient">Patient / Attender</option>
+                <option value="hospital">Hospital</option>
+              </select>
+              <label class="form-label" for="requester_type">Requester Type</label>
+            </div>
+
+            <div class="form-group" id="hospitalGroup" style="display:none;">
+              <input class="form-input" type="text" id="hospital_name"
+                     name="hospital_name" placeholder=" " />
+              <label class="form-label" for="hospital_name">Hospital Name</label>
+            </div>
+
+            <div class="form-group">
+              <select class="form-input" id="blood_group" name="blood_group" required>
+                <option value="" disabled selected hidden></option>
+                <option>A+</option><option>A-</option>
+                <option>B+</option><option>B-</option>
+                <option>O+</option><option>O-</option>
+                <option>AB+</option><option>AB-</option>
+              </select>
+              <label class="form-label" for="blood_group">Required Blood Group</label>
+            </div>
+
+            <div class="form-group">
+              <input class="form-input" type="number" id="units_requested"
+                     name="units_requested" placeholder=" " min="1" required />
+              <label class="form-label" for="units_requested">Units Required</label>
+            </div>
+
+            <div class="form-group">
+              <input class="form-input" type="tel" id="contact_phone"
+                     name="contact_phone" placeholder=" " required />
+              <label class="form-label" for="contact_phone">Contact Phone</label>
+            </div>
+
+            <div class="form-group">
+              <textarea class="form-input" id="notes" name="notes"
+                        rows="3" placeholder=" "></textarea>
+              <label class="form-label" for="notes">
+                Additional Details (patient name, ward, urgency…)
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px;">
+              Submit Request
+            </button>
+
+            <p id="requestMessage" style="margin-top:10px;font-size:14px;"></p>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const requesterType = document.getElementById("requester_type");
+    const hospitalGroup = document.getElementById("hospitalGroup");
+    const bloodSelect = document.getElementById("blood_group");
+    const availabilityText = document.getElementById("availabilityText");
+
+    requesterType.addEventListener("change", () => {
+      hospitalGroup.style.display =
+        requesterType.value === "hospital" ? "block" : "none";
+    });
+
+    bloodSelect.addEventListener("change", async () => {
+      const group = bloodSelect.value;
+      availabilityText.textContent = "Checking availability...";
+      availabilityText.style.color = "#cccccc";
+      try {
+        const res = await fetch(
+          "http://localhost:3000/api/availability?group=" + encodeURIComponent(group)
+        );
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        const units = data.unitsAvailable ?? 0;
+
+        if (units > 0) {
+          availabilityText.textContent =
+            "Currently available: " + units + " unit(s) of " + group + ".";
+          availabilityText.style.color = "#4eff7b";
+        } else {
+          availabilityText.textContent =
+            "No units of " + group + " are currently marked as available.";
+          availabilityText.style.color = "#ff5f77";
+        }
+      } catch (e) {
+        availabilityText.textContent = "Could not check availability.";
+        availabilityText.style.color = "#ff5f77";
+      }
+    });
+
+    const requestForm = document.getElementById("requestForm");
+    const requestMessage = document.getElementById("requestMessage");
+
+    requestForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      requestMessage.textContent = "Submitting...";
+      requestMessage.style.color = "#cccccc";
+
+      const formData = new FormData(requestForm);
+      const payload = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch("http://localhost:3000/api/requests", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (res.ok) {
+          requestMessage.textContent =
+            "Request submitted successfully. Our staff will contact you shortly.";
+          requestMessage.style.color = "#4eff7b";
+          requestForm.reset();
+          hospitalGroup.style.display = "none";
+          availabilityText.textContent =
+            "Select a blood group to check current availability.";
+          availabilityText.style.color = "#ffffff";
+        } else {
+          requestMessage.textContent =
+            "Could not submit request. Please try again.";
+          requestMessage.style.color = "#ff5f77";
+        }
+      } catch (err) {
+        console.error(err);
+        requestMessage.textContent = "Server error. Please try again.";
+        requestMessage.style.color = "#ff5f77";
+      }
+    });
+  </script>
+</body>
+</html>

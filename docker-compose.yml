@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: change_me_root
+      MYSQL_DATABASE: blood_bank
+      MYSQL_USER: blood_user
+      MYSQL_PASSWORD: change_me
+    volumes:
+      - db_data:/var/lib/mysql
+    # Uncomment to expose MySQL to host (not recommended for production)
+    # ports:
+    #   - "3306:3306"
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+volumes:
+  db_data:

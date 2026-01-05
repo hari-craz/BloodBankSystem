@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard | Blood Bank+</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Blood Bank+</h2>
+    <a href="#" class="active" data-section="overview">Overview</a>
+    <a href="#" data-section="stock">Blood Stock</a>
+    <a href="#" data-section="requests">Requests</a>
+    <a href="#" data-section="donors">Donors</a>
+    <hr style="border-color:#333;margin:18px 0;">
+    <div style="font-size:13px;opacity:0.8;">
+      Logged in as:<br />
+      <span id="adminName" style="font-weight:600;">Admin</span>
+    </div>
+    <button id="logoutBtn" class="btn btn-outline"
+            style="width:100%;margin-top:14px;">Logout</button>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <!-- Overview Section -->
+    <section id="section-overview">
+      <h1 style="margin-bottom:16px;">Dashboard Overview</h1>
+      <div class="dashboard-cards">
+        <div class="dashboard-card">
+          <h3>Total Donors</h3>
+          <h2 id="cardTotalDonors">0</h2>
+        </div>
+        <div class="dashboard-card">
+          <h3>Units Available</h3>
+          <h2 id="cardTotalUnits">0</h2>
+        </div>
+        <div class="dashboard-card">
+          <h3>Pending Requests</h3>
+          <h2 id="cardPendingRequests">0</h2>
+        </div>
+        <div class="dashboard-card">
+          <h3>Expiring Soon (7 days)</h3>
+          <h2 id="cardExpiring">0</h2>
+        </div>
+      </div>
+
+      <div class="table-container" style="margin-top:30px;">
+        <h2 style="margin-bottom:10px;">Latest Requests</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Requester</th>
+              <th>Group</th>
+              <th>Units</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="overviewRequestsBody">
+            <!-- Filled by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Blood Stock Section -->
+    <section id="section-stock" style="display:none;">
+      <h1 style="margin-bottom:16px;">Blood Stock (Per Bag)</h1>
+      <p style="opacity:0.8;margin-bottom:12px;">
+        Each row represents an individual blood bag with its own collection and expiry date.
+      </p>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Bag ID</th>
+              <th>Donor</th>
+              <th>Group</th>
+              <th>Units</th>
+              <th>Collected</th>
+              <th>Expires</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="stockTableBody">
+            <!-- Filled by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Requests Section -->
+    <section id="section-requests" style="display:none;">
+      <h1 style="margin-bottom:16px;">All Requests</h1>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Requester</th>
+              <th>Type</th>
+              <th>Group</th>
+              <th>Units</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="requestsTableBody">
+            <!-- Filled by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Donors Section -->
+    <section id="section-donors" style="display:none;">
+      <h1 style="margin-bottom:16px;">Registered Donors</h1>
+      <div style="margin-bottom:10px;">
+        <input id="donorSearch" type="search" placeholder="Search donor by name or group"
+               class="form-input" style="max-width:280px;" />
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Group</th>
+              <th>Phone</th>
+              <th>Last Donated</th>
+            </tr>
+          </thead>
+          <tbody id="donorsTableBody">
+            <!-- Filled by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
