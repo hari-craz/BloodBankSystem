@@ -120,7 +120,9 @@
   </main>
 
   <script>
-    const API_URL = window.location.origin.replace(':8080', ':3000');
+    const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+      ? `http://${window.location.hostname}:8087`
+      : window.location.origin.replace(':8086', ':8087');
     const requesterType = document.getElementById("requester_type");
     const hospitalGroup = document.getElementById("hospitalGroup");
     const bloodSelect = document.getElementById("blood_group");
@@ -176,6 +178,8 @@
           body: JSON.stringify(payload),
         });
 
+        const data = await res.json();
+        
         if (res.ok) {
           requestMessage.textContent =
             "Request submitted successfully. Our staff will contact you shortly.";
@@ -187,12 +191,13 @@
           availabilityText.style.color = "#ffffff";
         } else {
           requestMessage.textContent =
-            "Could not submit request. Please try again.";
+            data.error || "Could not submit request. Please try again.";
           requestMessage.style.color = "#ff5f77";
+          console.error("Request error:", data);
         }
       } catch (err) {
         console.error(err);
-        requestMessage.textContent = "Server error. Please try again.";
+        requestMessage.textContent = "Network error: " + err.message;
         requestMessage.style.color = "#ff5f77";
       }
     });

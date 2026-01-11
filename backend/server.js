@@ -46,6 +46,12 @@ app.use("/api", donorRoutes);
 app.use("/api", requestRoutes);
 app.use("/api", stockRoutes);
 
+/* ---------- Global error handler ---------- */
+app.use((err, req, res, next) => {
+  console.error("🔴 Error:", err);
+  res.status(500).json({ error: err.message || "Internal server error" });
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 API running at http://localhost:${PORT}`);
 });

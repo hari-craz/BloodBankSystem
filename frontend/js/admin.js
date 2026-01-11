@@ -1,4 +1,6 @@
-const API_BASE = window.location.origin.replace(':8086', ':8087') + "/api";
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+  ? `http://${window.location.hostname}:8087`
+  : window.location.origin.replace(':8086', ':8087')) + "/api";
 
 function getAuthHeaders() {
   const token = localStorage.getItem("bb_token");

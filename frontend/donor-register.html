@@ -111,7 +111,9 @@
   </main>
 
   <script>
-    const API_URL = window.location.origin.replace(':8080', ':3000');
+    const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+      ? `http://${window.location.hostname}:8087`
+      : window.location.origin.replace(':8086', ':8087');
     const donorForm = document.getElementById("donorForm");
     const donorMessage = document.getElementById("donorMessage");
 
@@ -130,17 +132,20 @@
           body: JSON.stringify(payload),
         });
 
+        const data = await res.json();
+        
         if (res.ok) {
           donorMessage.textContent = "Thank you! You have been registered as a donor.";
           donorMessage.style.color = "#4eff7b";
           donorForm.reset();
         } else {
-          donorMessage.textContent = "Error registering donor. Please try again.";
+          donorMessage.textContent = data.error || "Error registering donor. Please try again.";
           donorMessage.style.color = "#ff5f77";
+          console.error("Server error:", data);
         }
       } catch (err) {
         console.error(err);
-        donorMessage.textContent = "Server error. Please try again later.";
+        donorMessage.textContent = "Network error: " + err.message;
         donorMessage.style.color = "#ff5f77";
       }
     });

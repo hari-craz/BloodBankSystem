@@ -55,7 +55,9 @@
   </main>
 
   <script>
-    const API_URL = window.location.origin.replace(':8080', ':3000');
+    const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+      ? `http://${window.location.hostname}:8087`
+      : window.location.origin.replace(':8086', ':8087');
     const loginForm = document.getElementById("loginForm");
     const loginMessage = document.getElementById("loginMessage");
 
@@ -72,13 +74,15 @@
           body: JSON.stringify(payload),
         });
 
+        const data = await res.json();
+        
         if (!res.ok) {
-          loginMessage.textContent = "Invalid email or password.";
+          loginMessage.textContent = data.error || "Invalid email or password.";
           loginMessage.style.color = "#ff5f77";
+          console.error("Login error:", data);
           return;
         }
 
-        const data = await res.json();
         localStorage.setItem("bb_token", data.token);
         localStorage.setItem("bb_user", JSON.stringify(data.user));
 
@@ -90,7 +94,7 @@
         }, 700);
       } catch (err) {
         console.error(err);
-        loginMessage.textContent = "Server error. Please try again.";
+        loginMessage.textContent = "Network error: " + err.message;
         loginMessage.style.color = "#ff5f77";
       }
     });
