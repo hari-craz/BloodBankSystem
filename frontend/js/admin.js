@@ -1,4 +1,4 @@
-const API_BASE = window.location.origin.replace(':8080', ':3000') + "/api";
+const API_BASE = window.location.origin.replace(':8086', ':8087') + "/api";
 
 function getAuthHeaders() {
   const token = localStorage.getItem("bb_token");

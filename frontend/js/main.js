@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const pendingEl = document.getElementById("pendingRequests");
 
   if (donorsEl && unitsEl && pendingEl) {
-    const API_URL = window.location.origin.replace(':8080', ':3000');
+    const API_URL = window.location.origin.replace(':8086', ':8087');
     fetch(API_URL + "/api/stats")
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
