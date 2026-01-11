@@ -17,9 +17,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const pendingEl = document.getElementById("pendingRequests");
 
   if (donorsEl && unitsEl && pendingEl) {
-    const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-      ? `http://${window.location.hostname}:8087`
-      : window.location.origin.replace(':8086', ':8087');
+    // Detect if running locally or in production
+    const getAPIURL = () => {
+      const protocol = window.location.protocol;
+      const hostname = window.location.hostname;
+      const port = window.location.port;
+      
+      // If running on localhost, use port 8087
+      if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        return `${protocol}//${hostname}:8087`;
+      }
+      // If running on a domain/IP, replace the frontend port with backend port
+      if (port === '8086') {
+        return `${protocol}//${hostname}:8087`;
+      }
+      // Default: use same host with backend port
+      return `${protocol}//${hostname}:8087`;
+    };
+    const API_URL = getAPIURL();
     fetch(API_URL + "/api/stats")
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
