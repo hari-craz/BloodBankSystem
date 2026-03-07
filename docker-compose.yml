@@ -10,8 +10,11 @@ services:
       MYSQL_USER: blood_user
       MYSQL_PASSWORD: hari1234
     volumes:
-      - db_data:/var/lib/mysql
+      # Database stored on HDD - accessible via TrueNAS File Browser
+      - /mnt/Hdd/Hari/Projects/bloodbank_data/mysql:/var/lib/mysql
       - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # Backup folder on HDD
+      - /mnt/Hdd/Hari/Projects/bloodbank_data/backups:/backups
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       timeout: 5s
@@ -49,6 +52,3 @@ services:
     ports:
       - "8086:80"
     restart: unless-stopped
-
-volumes:
-  db_data:
