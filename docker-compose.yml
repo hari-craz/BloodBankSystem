@@ -11,7 +11,7 @@ services:
       MYSQL_PASSWORD: hari1234
     volumes:
       - db_data:/var/lib/mysql
-      - /Hdd/Hari/Projects/backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - /mnt/Hdd/Hari/Projects/backend/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       timeout: 5s
@@ -22,7 +22,7 @@ services:
 
   backend:
     build:
-      context: /Hdd/Hari/Projects/backend
+      context: /mnt/Hdd/Hari/Projects/backend
       dockerfile: Dockerfile
     environment:
       NODE_ENV: production
@@ -42,7 +42,7 @@ services:
 
   frontend:
     build:
-      context: /Hdd/Hari/Projects/frontend
+      context: /mnt/Hdd/Hari/Projects/frontend
       dockerfile: Dockerfile
     depends_on:
       - backend
