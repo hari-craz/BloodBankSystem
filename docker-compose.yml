@@ -11,9 +11,9 @@ services:
       MYSQL_PASSWORD: hari1234
     volumes:
       - db_data:/var/lib/mysql
-      - /Hdd/Hari/Projects/bloodbank_system/backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - /Hdd/Hari/Projects/backend/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       timeout: 5s
       retries: 10
     # Uncomment to expose MySQL to host (not recommended for production)
@@ -22,7 +22,7 @@ services:
 
   backend:
     build:
-      context: /Hdd/Hari/Projects/bloodbank_system/backend
+      context: /Hdd/Hari/Projects/backend
       dockerfile: Dockerfile
     environment:
       NODE_ENV: production
@@ -42,7 +42,7 @@ services:
 
   frontend:
     build:
-      context: /Hdd/Hari/Projects/bloodbank_system/frontend
+      context: /Hdd/Hari/Projects/frontend
       dockerfile: Dockerfile
     depends_on:
       - backend
